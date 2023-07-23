@@ -1,0 +1,3 @@
+CRITICAL - 2023-05-10 16:24:32 --> Cannot redeclare App\Controllers\Home::llamarContacto()
+in APPPATH\Controllers\Home.php on line 63.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

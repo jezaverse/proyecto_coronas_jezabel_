@@ -1,0 +1,67 @@
+ /*Fuente importada par el titulo*/
+  
+ @import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap');
+ .texto{
+   font-family: "Metal Mania";
+   color: black;
+   text-align: center;
+   font-size: xx-large ;
+ }
+  /*Subtitulo*/
+  
+  @import url('https://fonts.googleapis.com/css2?family=Poltawski+Nowy&display=swap');
+  .texto2{
+    font-family:"Poltawski Nowy";
+    color: black;
+    text-align: center;
+    font-size:  medium;
+
+  }
+
+  .texto3{
+    font-family:"Poltawski Nowy";
+    color: black;
+    text-align: center;
+    font-size:  medium;
+    font-weight: bold;
+
+  }  
+
+  .texto-cuerpo{
+    font-family:"Poltawski Nowy";
+    color: black;
+    text-align: center;
+    font-size:  medium;
+
+  }  
+  .navbar-brand{
+    font-family: "Metal Mania";
+    color: black;
+    font-style: italic;
+ }
+  .nav-item{
+     font-family: "Poltawski Nowy";
+     color: black;
+  }
+  
+  body {
+    background-color: white; /*color de fondo del body*/ 
+  }
+
+.card {
+  margin-top: 10px;
+
+}
+.card img {
+ height: 200px;
+  max-width: 200px;
+}
+.card-img-top {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  height: auto;
+  
+}
+
