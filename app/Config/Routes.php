@@ -32,9 +32,9 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 //Llamo a los metodos
-//'/views', 'Home::metodoenhome'
+//'/views', 'Controlador::metodoencontrolador'
 
-//VISTAS
+//VISTAS GRALES.
 $routes->get('/', 'Home::index');
 $routes->get('/nueva_plantilla', 'Home::index');
 $routes->get('/quienes_somos', 'Home::llamarQuienesSomos');
@@ -42,14 +42,12 @@ $routes->get('/comercializacion', 'Home::llamarComercializacion');
 $routes->get('/terminos_usos', 'Home::llamarTerminosUsos');
 $routes->get('/contacto', 'Home::llamarContacto');
 $routes->get('/registro_usuario_view', 'Home::llamarRegistroUsuario');
-$routes->get('/catalogo_productos_view', 'Home:: llamarCatalogoProductos');
 
 //USUARIO  (Registro y Consultas)
 $routes->post('/registro_usuario', 'UserController::registrar_usuario');
 $routes->post('/registro_consulta', 'UserController::registrar_consulta');
-
-//Falta ruta para visualizar las consultas(la lista)
-$routes->get('ver_consultas', 'Home::verConsultas');
+$routes->get('/lista_usuarios_view', 'AdminController::ver_usuarios');
+$routes->get('ver_consultas', 'AdminController::ver_consultas');
 
 //INICIO SESION
 $routes->get('login', 'LoginController::ver_login');
@@ -57,34 +55,10 @@ $routes->post('authlogin', 'LoginController::login_usuario');
 $routes->get('logout', 'LoginController::cerrar_sesion');
 
 //PRODUCTOS
-$routes->get('agregar', 'ProductController:: form_agregar_producto');
-$routes->post('insertar_producto', 'ProductController::registrar_producto');
-$routes->get('productos', 'ProductController:: listar_productos');
 
 
-// Mostrar productos en el Catálogo
-$routes->get('/catalogo', 'CartController::catalogo_productos_view');
+$routes->get('/registro_producto', 'ProductController::registrar_producto');
 
-// Carrito 
-$routes->post('add_cart', 'CartController::agregar_carrito');
-
-$routes->get('/ver_carrito', 'CartController::ver_carrito');
-//$routes->post('/agregar_carrito', 'cartController::add');
-//$routes->get('carrito_elimina/(:any)','cartController::remove/$1');
-
-//eliminar todo el carrito
-$routes->get('/borrar','cartController::borrar_carrito');
-
-//muestra las compras una vez que realizamos la misma
-$routes->get('/carrito-comprar', 'ventasController::registrar_venta');
-
-
-//Rutas ventas
-$routes->get('/ventas', 'ventasController::ventas');
-
-
-
-// SINTAXIS $routes->get('/nombreRuta', 'Home::nombreFuncion');
 
 /*usuario */
 
