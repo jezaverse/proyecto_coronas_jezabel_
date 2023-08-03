@@ -2,63 +2,50 @@
 
 namespace App\Controllers;
 use App\Models\User_model;
+use App\Models\Categoria_model;
 use App\Models\Consulta_model;
 use CodeIgniter\Controller;
 
 class AdminController extends BaseController {
 
+    public function ver_consultas(){
+        $consultas = new Consulta_model();
+        $data['consultas'] = $consultas->findAll();
+       // $categoriasModel = new Categoria_model();
 
-        // Se buscan las consultas realizadas
-   public function listarConsultas()
-   {
-       $datosConsulta['titulo']            = "Lista de Consultas";
-       $datosConsulta['titulo_Leidos']     = "Mensajes Leidos";
-       $datosConsulta['consultas']         = $this->consultas->findAll();
-       $datosConsulta['consultas_Leidas']  = $this->consultas->onlyDeleted()->findAll();
-       
-       if($datosConsulta['consultas'] == null && $datosConsulta['consultas_Leidas'] !=null)
-       {
-           $datosConsul['titulo']              = "Lista de Consultas";
-           $datosConsul['titulo_Leidos']       = "Mensajes Leidos";
-           $datosConsul['consultas_Leidas']    = $this->consultas->onlyDeleted()->findAll();
+       // $data['tipos'] = $categoriasModel->findAll();
+        $data['titulo'] = 'Administrador';
+        echo view('plantillas/header', $data);
+        echo view('plantillas/navbar');
+        echo view("ver_consultas");
+        echo view('plantillas/footer');
+    }
 
-           $data = ["titulo" => "Handball Gear Central - Consultas"];
-           echo view("vista_head", $data);
-           echo view("vista_nav");
-           echo view("Consulta/Tabla_Consultas", $datosConsul);
-           echo view("vista_footer");
-       }else if($datosConsulta['consultas'] != null && $datosConsulta['consultas_Leidas'] == null)
-       {
-           $datosConsul['titulo']          = "Lista de Consultas";
-           $datosConsul['consultas']       = $this->consultas->findAll();
-           $datosConsul['titulo_Leidos']   = "Mensajes Leidos";
-           
+    public function admin_view()
+    {
+        $categoriasModel = new Categoria_model();
 
-           $data = ["titulo" => "Handball Gear Central - Consultas"];
-           echo view("vista_head", $data);
-           echo view("vista_nav");
-           echo view("Consulta/Tabla_Consultas", $datosConsul);
-           echo view("vista_footer");
-       }else
-       {
-           $datosConsul['titulo']              = "Lista de Consultas";
-           $datosConsul['titulo_Leidos']       = "Mensajes Leidos";
-           $datosConsul['consultas']           = $this->consultas->findAll();
-           $datosConsul['consultas_Leidas']    = $this->consultas->onlyDeleted()->findAll();
+        $data['tipos'] = $categoriasModel->findAll();
+        if (session()->login && session()->perfil == 1) {
+            $data['titulo'] = 'Administrador';
+            echo view('plantillas/header', $data);
+            echo view('plantillas/navbar');
+            echo view('plantillas/footer');
+        } else {
+            return redirect()->route('/');
+        }
+    }
 
-           $data = ["titulo" => "Handball Gear Central - Consultas"];
-           echo view("vista_head", $data);
-           echo view("vista_nav");
-           echo view("Consulta/Tabla_Consultas", $datosConsul);
-           echo view("vista_footer");
-       }
-   }
-   // Se borra lógicamente al leer la consulta
-   public function consultaVerificada($id = null)
-   {
-       $this->consultas->delete($id);
-       return redirect()->to(base_url('').'/administrador/listarConsultas')->with('alertaExitosa', 'Consulta de Cliente Leída!');
-   }
-
+    public function ver_usuarios()
+    {
+        $usuarios = new User_model();
+        $data['usuarios'] = $usuarios->findAll();
+     
+        $data['titulo'] = 'Administrador';
+        echo view('plantillas/header', $data);
+        echo view('plantillas/navbar');
+        echo view("lista_usuarios_view");
+        echo view('plantillas/footer');
+    }
 }
 
