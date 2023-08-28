@@ -9,104 +9,99 @@ use CodeIgniter\Controller;
 class ProductController extends BaseController{
        
 
-
+    //AÑADIR UN PRODUCTO NUEVO
     public function registrar_producto(){
 
         $validation= \Config\Services::validation();
         $request= \Config\Services:: request();
-       //establece reglas de validacion
-       $validation-> setRules([
-        'nombre'=> 'required',
-        'descripcion'=> 'required',
-        'precio'=> 'required',
-        'imagen'=>'required',
-        'stock'=>'required',
-        'categoria'=>'required',
-        'estado'=>'required',
-        ],
-         [
-            "nombre" =>[
-            "required" => 'Este campo es obligatorio',
-            ],
-             "descripcion"=> [
-                "required" => 'Este campo es obligatorio',
-             ],
-             "precio"=> [
-                "required" => 'Este campo es obligatorio',
-             ],
+          
+        if ($request->is('post')) {
+            $rules = [
+                'nombre' => 'required',
+                'descripcion' => 'required',
+                'precio' => 'required',
+                'imagen' => 'uploaded[imagen]|max_size[imagen, 4096]|is_image[imagen]',
+                'stock' => 'required|is_natural',
+                'categoria' => 'required',
+                
+            ];
 
-             //Como subimos la imagen??
-             "imagen"=> [
-                'uploaded[imagen]|max_size[imagen, 4096]|is_image[imagen]',
-                ],
+            $validations = $this->validate($rules);
 
-            "stock"=> [
-                "required" => 'Este campo es obligatorio',
-                ],
-            "categoria"=> [
-                "required" => 'Este campo es obligatorio',
-            ],
-            "estado"=> [
-                "required" => 'Este campo es obligatorio',
-                ],
-            ]);
-
-            if ($validation->withRequest($this->request)->run()){
-                //si la validación es correcta carga los datos
+            if ($validations) {
                 $img = $this->request->getFile('imagen');
                 $nombreAleatorio = $img->getRandomName();
-                $img->move(ROOTPATH . 'assets/ImagenesProducto/', $nombreAleatorio);
+                $img->move(ROOTPATH . 'assets/img/producto', $nombreAleatorio);
 
-
-                
                 $precio = $this->request->getPost('precio');
                 $precioSinFormato = str_replace('.', '', $precio);
 
-                $data=[
-                    'producto_nombre'=> $request->getPost('nombre'),
-                    'producto_descripcion'=> $request->getPost('descripcion'),
+                $data = [
+                    'producto_nombre' => $request->getPost('nombre'),
+                    'producto_descripcion' => $request->getPost('descripcion'),
                     'producto_precio' => $precioSinFormato,
-                    //ver lo de imagen
-                   
                     'producto_imagen' => $nombreAleatorio,
-                    'producto_stock'=> $request->getPost('stock'),
-                    'producto_categoria'=> $request->getPost('categoria'),
-                    'producto_estado'=> 1
+                    'producto_stock' => $request->getPost('stock'),
+                    'producto_categoria' => $request->getPost('categoria'),
+                    'producto_estado' => 1,
+                    'producto_id'=>2,
+
                 ];
-                 $productRegister= new Producto_model();
-                 $productRegister->insert($data);
-                 return redirect()->to(base_url('/agregar_producto_view'))->with('msg','Producto registrado!');
+
+                $registroProducto = new Producto_model();
+                $registroProducto->insert($data);
+
+                return redirect()->to('agregar_producto_view')->with('MensajeProducto', 'Producto nuevo cargado.');
+
             
-            }else{
-                //$data['validation'] = $this->validator;
-                $data['errors'] = $validation->getErrors();
-                session()->setFlashdata('msg', '¡Datos no válidos!');
-                return redirect()->to(base_url('/agregar_producto_view'));
-          
             }
-            
-            return view('plantillas/header', $data).view('plantillas/navbar').view('agregar_producto_view').view('plantillas/footer');
-
         }
+    }
+       
 
+    //VISUALIZAR PRODUCTOS
+    public function ver_productos(){
+        $productos = new Producto_model();
+        $data['productos'] = $productos->findAll();
+       // $categoriasModel = new Categoria_model();
 
-            
-    
-     //acá iría gestión view pero lo borré
-    public function editar_productos_view($id = null)
-    {
-        $productoModel = new Producto_model();
-        $categoriaModel = new Categoria_model();
-
-        $data['tipos'] = $categoriaModel->findAll();
-        $data['producto'] = $productoModel->where('id_producto', $id)->first();
-        $data['tipos'] = $categoriaModel->findAll();
-        $data['titulo'] = 'Editar Producto';
+       // $data['tipos'] = $categoriasModel->findAll();
+        $data['titulo'] = 'Administrador';
         echo view('plantillas/header', $data);
         echo view('plantillas/navbar');
-        echo view('editar_productos_view');
+        echo view('listar_productos_view');
         echo view('plantillas/footer');
     }
+
+
+    //LLAMAR LA VISTA DE AGREGAR PRODUCTO EN ROUTES
+    public function llamarAgregarProducto(){
+
+        $data  ['titulo']= 'Agregar Producto';
+        echo view("plantillas/header", $data);
+        echo view ("plantillas/navbar");
+        echo view('agregar_producto_view');
+        echo view("plantillas/footer");
+    
+    }
+    
+        
+
+    //FALTA DESARROLLAR DE AHORA EN ADELANTE: EDITAR, ELIMINAR, ACTUALIZAR
+    
+    //public function editar_productos_view($id = null){
+//        $productoModel = new Producto_model();
+  //      $categoriaModel = new Categoria_model();
+
+    //    $data['tipos'] = $categoriaModel->findAll();
+      //  $data['producto'] = $productoModel->where('id_producto', $id)->first();
+      //  $data['tipos'] = $categoriaModel->findAll();
+    // $data['titulo'] = 'Editar Producto';
+      //  echo view('plantillas/header', $data);
+       // echo view('plantillas/navbar');
+       // echo view('editar_productos_view');
+       // echo view('plantillas/footer');
+   // }
 
 
         public function actualizarProducto(){
@@ -118,19 +113,19 @@ class ProductController extends BaseController{
     
             if ($request->is('post')) {
     
-                if ($this->request->getFile('imagenProducto')->isValid()) {
+                if ($this->request->getFile('imagen')->isValid()) {
                     $rules = [
                         'nombreProducto' => 'required',
                         'tipoProducto' => 'required|is_not_unique[tipo.id_tipo]',
                         'descripcionProducto' => 'required',
                         'precioProducto' => 'required',
-                        'imagenProducto' => 'uploaded[imagenProducto]|max_size[imagenProducto, 4096]|is_image[imagenProducto]',
+                        'imagen' => 'uploaded[imagen]|max_size[imagen, 4096]|is_image[imagen]',
                         'stockProducto' => 'required|is_natural'
                     ];
     
                     $validations = $this->validate($rules);
     
-                    $img = $this->request->getFile('imagenProducto');
+                    $img = $this->request->getFile('imagen');
                     $nombreAleatorio = $img->getRandomName();
                     $img->move(ROOTPATH . 'assets/imagenesproducto', $nombreAleatorio);
     
@@ -214,5 +209,4 @@ class ProductController extends BaseController{
      
     
 }
-
 
