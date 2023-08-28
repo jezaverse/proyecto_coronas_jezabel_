@@ -9,20 +9,30 @@ class Producto_model extends Model{
     protected $useAutoIncrement = true;
 
     protected $returnType     = 'array';
-    protected $useSoftDeletes = false;
+    protected $useSoftDeletes = true;
 
     protected $allowedFields = ['producto_nombre', 'producto_descripcion', 'producto_precio', 'producto_imagen', 'producto_stock', 'producto_categoria', 'producto_estado'];
 
-    protected $useTimestamps= false;
-    protected $createdField= "";
-    protected $updatedField= "";
-    protected $deletedField= "";
+ 
+
     
     // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
+
+    
+    // Callbacks
+    protected $allowCallbacks = true;
+    protected $beforeInsert   = [];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = [];
+    protected $afterUpdate    = [];
+    protected $beforeFind     = [];
+    protected $afterFind      = [];
+    protected $beforeDelete   = [];
+    protected $afterDelete    = [];
 
 
 }
