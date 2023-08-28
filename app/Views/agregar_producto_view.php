@@ -1,95 +1,91 @@
 <!doctype html>
 <html lang="en">
  
-   <body> 
- 
- <!-- Información de contacto -->
- 
- <hr class="hr" />
-    <h1 class="texto"> Agregar Producto </h1>
-    
-    <!-- Formulario --> 
-    <?php $validation = \Config\Services::validation(); ?>
+   <body>
+            <div class="col border-start border-dark">
+                <h1 class= "text-lg-center">Agregar productos a la venta</h1>
+                    <?php $validation = \Config\Services::validation(); ?>
+                    <?php if (session()->getFlashdata('msg')) { ?>
+                        <div class='alert alert-success alert-dismissible fade show text-center py-3 my-3' role='alert' id='mensaje'>
+                            <?= session()->getFlashdata('msg'); ?>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php } ?>
 
-
-    <div class="col border-start border-dark">
-				
-			    <div class="row">
-			    	
-
-			    	<?php 
-					if(session()->getFlashdata('Msg')){
-
-										echo session()->getFlashdata('Msg');
-									}
-									
-								if(isset($errors)) { ?>
-										<div class="alert alert-danger" role="alert">
-													<ul>
-													<?php foreach ($errors as $error): ?>
-														<li><?= esc($error) ?></li>
-													<?php endforeach ?>
-													</ul>
-					
-					<?php } ?>
-
-			    	<?php echo form_open_multipart('/registro_producto');?>
-					
-					
-						<div class="form-group mt-2">
-							<label for="nombre" class="fw-bold">Ingrese Nombre: </label>
-							<?php echo form_input(['name' => 'nombre', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Nombre']); ?>
-						</div>
-
-
-				    <div class="form-group mt-2">
-			            <label for="descripcion" class="fw-bold">Descripcion:</label>
-			            <?php echo form_input(['name' => 'correo', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Correo Electronico']); ?>
-			        </div>
-
-			        <div class="form-group mt-2">
-			            <label for="precio" class="fw-bold">Precio:</label>
-			            <?php echo form_input(['name' => 'telefono', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Telefono']); ?>
-			        </div>
-
-                    <div class="form-group mt-2">
-                    <label for="stock" class="fw-bold">Imagen: </label>
-
-                    <td><img src="<?php echo base_url('assets/ImagenesProducto/' . $row['producto_imagen']); ?>" width="100px" height="100px" alt=""></td>
-                        <td>
+                    <?php echo form_open_multipart('registrar_producto') ?> 
+                    <div class="row gy-4">
+                    <div class="col-md-6">
+                        <label for="nombre" class="form-label text-lg-center">Nombre</label>
+                        <input type="text" name="nombre" placeholder="Nombre del articulo" 
+                        value="<?php echo set_value('nombre'); ?>" class="form-control" id="inputText4">
+                        <?php if ($validation->getError('nombre')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('nombre'); ?>
+                                </div>
+                        <?php } ?>
+                    </div>
+                
+                    <div class="col-6">
+                        <label for="descripcion" for="descripcion" class="form-label">Descripcion del articulo</label>
+                        <textarea class="form-control border border-dark" value="<?php echo set_value('descripcion'); ?>" name="descripcion" 
+                        id="descripcion" rows="3" maxlength="1000" placeholder="Descripción del articulo"></textarea>
+                        <?php if ($validation->getError('descripcion')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('descripcion'); ?>
+                                </div>
+                        <?php } ?>
+                    </div>
+                    <div class="col-6 input-group">
+                        <label for="precio" class="input-group form-label">Precio del articulo</label>
+                        <span class="input-group-text">$</span>
+                        <input type="text" name="precio" id="precio" placeholder="Precio del producto" 
+                        value="<?php echo set_value('precio'); ?>" 
+                        class="form-control" id="inputText4">
+                        <?php if ($validation->getError('precio')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('precio'); ?>
+                                </div>
+                        <?php } ?>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="stock" class="form-label">Unidades en Stock</label>
+                        <input type="number" name="stock" placeholder="Stock" value="<?php echo set_value('stock'); ?>" class="form-control" 
+                        id="inputText4">
+                        <?php if ($validation->getError('stock')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('stock'); ?>
+                                </div>
+                        <?php } ?>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="imagen" class="form-label">Foto o Imagen</label>
+                        <input class="form-control" name="imagen"  type="file" id="formFile">
+                        <?php if ($validation->getError('imagen')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('imagen'); ?>
+                                </div>
+                        <?php } ?>
                     </div>
 
-			        <div class="form-group mt-2">
-			            <label for="stock" class="fw-bold">Stock: </label>
-			            <?php echo form_input(['name' => 'mensaje', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Mensaje']); ?>
-			        </div>
+                    <div class="col-md-6">
+                        <label for="categoria" class="form-label">Categoría</label>
+                        <input type="text" name="categoria" placeholder="categoria" value="<?php echo set_value('categoria'); ?>" 
+                        class="form-control" id="inputText4">
+                        <?php if ($validation->getError('categoria')) { ?>
+                                <div class='alert alert-danger mt-2'>
+                                    <?= $error = $validation->getError('categoria'); ?>
+                                </div>
+                        <?php } ?>
+                        </div>
 
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Cargar</button>
+                    </div>
+                    </div>
+                <?php form_close(); ?>
+            </div>
 
-                    <div class="form-group mt-2">
-			            <label for="categoria" class="fw-bold">Categoria: </label>
-			            <?php echo form_input(['name' => 'mensaje', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Mensaje']); ?>
-			        </div>
-        
-                    <div class="form-group mt-2">
-			            <label for="estado" class="fw-bold">Estado: </label>
-			            <?php echo form_input(['name' => 'mensaje', 'type' => 'text', 'class' => 'form-control', 'placeholder' => 'Ingrese Mensaje']); ?>
-			        </div>
-
-
-			        <?php echo form_submit('registrar_producto', 'enviar', "class='btn btn-success mt-3'"); ?>
-    				<?php echo form_close();?>
-				</div>
-			</div>
-	  
-           
-        <div class="col-md-3">
-        </div>
-
-      </div>
-    </div>
-   
-                          
-
-    <script src=" <?php echo base_url("assets/js/bootstrap.bundle.min.js")?>" type="text/javascript"></script>
-
-</body> 
+            
+</body>
+</html>
